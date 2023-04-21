@@ -1,6 +1,7 @@
 package io
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"noa/codec"
@@ -30,6 +31,12 @@ func (s *Server) addCodec(cc codec.Codec) {
 }
 
 func (s *Server) Listen(port int) error {
+	if s.handler == nil {
+		return fmt.Errorf("no handler,please set")
+	}
+	if s.cc == nil {
+		return fmt.Errorf("no codec,please set")
+	}
 	listen, err := net.Listen(TYPE, ":"+strconv.Itoa(port))
 	if err != nil {
 		return err

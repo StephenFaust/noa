@@ -1,6 +1,7 @@
 package io
 
 import (
+	"fmt"
 	"net"
 	"noa/codec"
 )
@@ -27,6 +28,12 @@ func (c *Client) addCodec(cc codec.Codec) {
 }
 
 func (c *Client) Connect(address string) (error, *Chanel) {
+	if c.handler == nil {
+		return fmt.Errorf("no handler,please set"), nil
+	}
+	if c.cc == nil {
+		return fmt.Errorf("no codec,please set"), nil
+	}
 	conn, err := net.Dial(TYPE, address)
 	if err != nil {
 		return err, nil
