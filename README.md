@@ -1,6 +1,6 @@
 # Noa
 
-## a network framework
+## A network framework
 
 ## Example
 
