@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"github.com/StephenMAOhjm/noa/codec"
 	"io"
 	"net"
-	"noa/codec"
 	"sync/atomic"
 )
 

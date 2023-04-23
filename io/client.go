@@ -2,8 +2,8 @@ package io
 
 import (
 	"fmt"
+	"github.com/StephenMAOhjm/noa/codec"
 	"net"
-	"noa/codec"
 )
 
 type Client struct {
