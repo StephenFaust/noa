@@ -30,22 +30,25 @@ func (c *Chanel) WriteAndFlush(data *bytes.Buffer) (err error) {
 func (c *Chanel) readyToRead() {
 	go func() {
 		for !c.isClose.Load() {
-			if err := readData(c); err == io.EOF {
-				c.isClose.Store(true)
-			}
+			readData(c)
 		}
 	}()
 }
 
-func readData(c *Chanel) error {
+func readData(c *Chanel) {
 	defer catchError(c)
 	data, err := c.cc.Decode(c.r)
 	if err != nil {
-		c.handler.OnError(c, err)
-		return err
+		if err == io.EOF {
+			c.isClose.Store(true)
+			c.handler.OnClose()
+		} else {
+			c.handler.OnError(c, err)
+		}
+		c.r.(*bufio.Reader).Reset(c.r)
 	}
 	c.handler.OnMessage(c, data)
-	return err
+
 }
 
 func getChanel(conn net.Conn, cc codec.Codec, handler ChanelHandler) *Chanel {
