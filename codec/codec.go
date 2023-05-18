@@ -1,7 +1,6 @@
 package codec
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/binary"
 	"io"
@@ -21,11 +20,6 @@ type LengthSplitCodec struct {
 func (codec LengthSplitCodec) Encode(w io.Writer, data *bytes.Buffer) (err error) {
 	l := data.Len()
 	var size [binary.MaxVarintLen64]byte
-	defer func() {
-		if err != nil {
-			w.(*bufio.Writer).Reset(w)
-		}
-	}()
 	if l == 0 {
 		n := binary.PutUvarint(size[:], uint64(0))
 		_, err := w.Write(size[:n])
@@ -47,11 +41,6 @@ func (codec LengthSplitCodec) Encode(w io.Writer, data *bytes.Buffer) (err error
 }
 
 func (codec LengthSplitCodec) Decode(r io.Reader) (data *bytes.Buffer, err error) {
-	defer func() {
-		if err != nil {
-			r.(*bufio.Reader).Reset(r)
-		}
-	}()
 	size, err := binary.ReadUvarint(r.(io.ByteReader))
 	if err != nil {
 		return nil, err

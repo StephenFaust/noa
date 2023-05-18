@@ -63,5 +63,7 @@ func accept(listen net.Listener, cc codec.Codec, handler ChanelHandler) (*Chanel
 	if err != nil {
 		return nil, err
 	}
-	return getChanel(conn, cc, handler), nil
+	chanel := getChanel(conn, cc, handler)
+	handler.OnActive(chanel)
+	return chanel, nil
 }

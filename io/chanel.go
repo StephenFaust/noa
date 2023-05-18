@@ -45,10 +45,9 @@ func readData(c *Chanel) {
 		} else {
 			c.handler.OnError(c, err)
 		}
-		c.r.(*bufio.Reader).Reset(c.r)
+	} else {
+		c.handler.OnMessage(c, data)
 	}
-	c.handler.OnMessage(c, data)
-
 }
 
 func getChanel(conn net.Conn, cc codec.Codec, handler ChanelHandler) *Chanel {

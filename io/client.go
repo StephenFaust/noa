@@ -40,6 +40,7 @@ func (c *Client) Connect(address string) (error, *Chanel) {
 	}
 	chanel := getChanel(conn, c.cc, c.handler)
 	c.chanel = chanel
+	c.handler.OnActive(chanel)
 	c.chanel.readyToRead()
 	return nil, chanel
 }

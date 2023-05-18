@@ -12,6 +12,10 @@ import (
 type TestChanelHandler struct {
 }
 
+func (handler TestChanelHandler) OnActive(chanel *io.Chanel) {
+	log.Println("channel active:", &chanel)
+}
+
 func (handler TestChanelHandler) OnMessage(chanel *io.Chanel, data *bytes.Buffer) {
 	log.Println(string(data.Bytes()))
 }
