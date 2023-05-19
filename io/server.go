@@ -50,7 +50,7 @@ func handleConn(listen net.Listener, s *Server) {
 		for {
 			chanel, err := accept(listen, s.cc, s.handler)
 			if err != nil {
-				log.Println("error connection ", err)
+				log.Println("Error connection ", err)
 				continue
 			}
 			chanel.readyToRead()

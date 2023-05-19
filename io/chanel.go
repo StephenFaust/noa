@@ -7,6 +7,7 @@ import (
 	"github.com/StephenMAOhjm/noa/codec"
 	"io"
 	"net"
+	"sync"
 	"sync/atomic"
 )
 
@@ -17,9 +18,12 @@ type Chanel struct {
 	cc      codec.Codec
 	handler ChanelHandler
 	isClose atomic.Bool
+	locker  sync.Mutex
 }
 
 func (c *Chanel) WriteAndFlush(data *bytes.Buffer) (err error) {
+	c.locker.Lock()
+	defer c.locker.Unlock()
 	err = c.cc.Encode(c.w, data)
 	if err != nil {
 		return err
@@ -51,12 +55,11 @@ func readData(c *Chanel) {
 }
 
 func getChanel(conn net.Conn, cc codec.Codec, handler ChanelHandler) *Chanel {
-	return &Chanel{bufio.NewReader(conn),
-		bufio.NewWriter(conn),
-		conn,
-		cc,
-		handler,
-		atomic.Bool{},
+	return &Chanel{r: bufio.NewReader(conn),
+		w:       bufio.NewWriter(conn),
+		c:       conn,
+		cc:      cc,
+		handler: handler,
 	}
 }
 
