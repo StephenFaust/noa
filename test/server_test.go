@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"github.com/StephenMAOhjm/noa/codec"
-	"github.com/StephenMAOhjm/noa/io"
+	"github.com/StephenFaust/noa/codec"
+	"github.com/StephenFaust/noa/io"
 	"log"
 	"testing"
 	"time"

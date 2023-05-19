@@ -2,7 +2,7 @@ package io
 
 import (
 	"fmt"
-	"github.com/StephenMAOhjm/noa/codec"
+	"github.com/StephenFaust/noa/codec"
 	"log"
 	"net"
 	"strconv"
