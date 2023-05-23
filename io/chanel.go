@@ -31,9 +31,13 @@ func (c *Chanel) WriteAndFlush(data *bytes.Buffer) (err error) {
 	return c.w.(*bufio.Writer).Flush()
 }
 
+func (c *Chanel) IsActive() bool {
+	return !c.isClose.Load()
+}
+
 func (c *Chanel) readyToRead() {
 	go func() {
-		for !c.isClose.Load() {
+		for c.IsActive() {
 			readData(c)
 		}
 	}()
@@ -43,10 +47,11 @@ func readData(c *Chanel) {
 	defer catchError(c)
 	data, err := c.cc.Decode(c.r)
 	if err != nil {
-		if err == io.EOF {
-			c.isClose.Store(true)
-			c.handler.OnClose()
+		if _, ok := err.(net.Error); ok || err == io.EOF {
+			// 处理连接异常错误
+			c.Close()
 		} else {
+			// 处理其他错误
 			c.handler.OnError(c, err)
 		}
 	} else {
