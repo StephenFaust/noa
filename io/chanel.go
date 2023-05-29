@@ -28,7 +28,8 @@ func (c *Chanel) WriteAndFlush(data *bytes.Buffer) (err error) {
 	if err != nil {
 		return err
 	}
-	return c.w.(*bufio.Writer).Flush()
+	err = c.w.(*bufio.Writer).Flush()
+	return err
 }
 
 func (c *Chanel) IsActive() bool {
